@@ -1,4 +1,4 @@
-package com.lwx.lwxmagiccodebackend.model.dto;
+package com.lwx.lwxmagiccodebackend.model.dto.user;
 
 import lombok.Data;
 

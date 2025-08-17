@@ -7,7 +7,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.lwx.lwxmagiccodebackend.exception.BusinessException;
 import com.lwx.lwxmagiccodebackend.exception.ErrorCode;
-import com.lwx.lwxmagiccodebackend.model.dto.UserQueryRequest;
+import com.lwx.lwxmagiccodebackend.model.dto.user.UserQueryRequest;
 import com.lwx.lwxmagiccodebackend.model.entity.User;
 import com.lwx.lwxmagiccodebackend.mapper.UserMapper;
 import com.lwx.lwxmagiccodebackend.model.enums.UserRoleEnum;

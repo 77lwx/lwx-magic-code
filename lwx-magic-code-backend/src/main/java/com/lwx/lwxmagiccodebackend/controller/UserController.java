@@ -1,6 +1,7 @@
 package com.lwx.lwxmagiccodebackend.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.lwx.lwxmagiccodebackend.model.dto.user.*;
 import com.mybatisflex.core.paginate.Page;
 import com.lwx.lwxmagiccodebackend.annotation.AuthCheck;
 import com.lwx.lwxmagiccodebackend.common.BaseResponse;
@@ -10,7 +11,6 @@ import com.lwx.lwxmagiccodebackend.constant.UserConstant;
 import com.lwx.lwxmagiccodebackend.exception.BusinessException;
 import com.lwx.lwxmagiccodebackend.exception.ErrorCode;
 import com.lwx.lwxmagiccodebackend.exception.ThrowUtils;
-import com.lwx.lwxmagiccodebackend.model.dto.*;
 import com.lwx.lwxmagiccodebackend.model.vo.LoginUserVO;
 import com.lwx.lwxmagiccodebackend.model.vo.UserVO;
 import jakarta.annotation.Resource;

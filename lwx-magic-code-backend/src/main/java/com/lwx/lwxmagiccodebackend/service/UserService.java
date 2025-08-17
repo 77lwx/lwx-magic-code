@@ -2,7 +2,7 @@ package com.lwx.lwxmagiccodebackend.service;
 
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
-import com.lwx.lwxmagiccodebackend.model.dto.UserQueryRequest;
+import com.lwx.lwxmagiccodebackend.model.dto.user.UserQueryRequest;
 import com.lwx.lwxmagiccodebackend.model.entity.User;
 import com.lwx.lwxmagiccodebackend.model.vo.LoginUserVO;
 import com.lwx.lwxmagiccodebackend.model.vo.UserVO;
