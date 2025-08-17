@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 用户 服务层。
  *
- * @author <a href="https://github.com/liyupi">浪味仙</a>
+ * @author <a href="https://github.com/lilwx">浪味仙</a>
  */
 public interface UserService extends IService<User> {
 

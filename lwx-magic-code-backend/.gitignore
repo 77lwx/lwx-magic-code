@@ -1,3 +1,9 @@
+### CUSTOM ###
+application-local.yml
+
+
+
+
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
@@ -31,3 +37,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/test/java/com/lwx/lwxmagiccodebackend/ai/AiCodeGeneratorServiceTest.java
+/src/test/java/com/lwx/lwxmagiccodebackend/core/CodeParserTest.java
