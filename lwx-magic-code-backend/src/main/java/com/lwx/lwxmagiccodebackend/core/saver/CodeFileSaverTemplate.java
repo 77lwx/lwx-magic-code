@@ -1,10 +1,12 @@
 package com.lwx.lwxmagiccodebackend.core.saver;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.lwx.lwxmagiccodebackend.exception.BusinessException;
 import com.lwx.lwxmagiccodebackend.exception.ErrorCode;
+import com.lwx.lwxmagiccodebackend.exception.ThrowUtils;
 import com.lwx.lwxmagiccodebackend.model.enums.CodeGenTypeEnum;
 
 import java.io.File;
@@ -26,11 +28,11 @@ public abstract class CodeFileSaverTemplate<T> {
      * @param result 代码结果对象
      * @return 保存的目录
      */
-    public final File saveCode(T result) {
+    public final File saveCode(T result, Long appId) {
         // 1. 验证输入
         validateInput(result);
         // 2. 构建唯一目录
-        String baseDirPath = buildUniqueDir();
+        String baseDirPath = buildUniqueDir(appId);
         // 3. 保存文件（具体实现由子类提供）
         saveFiles(result, baseDirPath);
         // 4. 返回目录文件对象
@@ -53,9 +55,10 @@ public abstract class CodeFileSaverTemplate<T> {
      *
      * @return 目录路径
      */
-    protected final String buildUniqueDir() {
+    protected final String buildUniqueDir(Long appId) {
+        ThrowUtils.throwIf( appId == null , ErrorCode.NOT_FOUND_ERROR, "appId不能为空");
         String codeType = getCodeType().getValue();
-        String uniqueDirName = StrUtil.format("{}_{}", codeType, IdUtil.getSnowflakeNextIdStr());
+        String uniqueDirName = StrUtil.format("{}_{}", codeType, appId);
         String dirPath = FILE_SAVE_ROOT_DIR + File.separator + uniqueDirName;
         FileUtil.mkdir(dirPath);
         return dirPath;
