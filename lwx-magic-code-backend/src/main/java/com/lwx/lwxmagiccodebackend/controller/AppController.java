@@ -12,10 +12,7 @@ import com.lwx.lwxmagiccodebackend.constant.UserConstant;
 import com.lwx.lwxmagiccodebackend.exception.BusinessException;
 import com.lwx.lwxmagiccodebackend.exception.ErrorCode;
 import com.lwx.lwxmagiccodebackend.exception.ThrowUtils;
-import com.lwx.lwxmagiccodebackend.model.dto.app.AppAddRequest;
-import com.lwx.lwxmagiccodebackend.model.dto.app.AppAdminUpdateRequest;
-import com.lwx.lwxmagiccodebackend.model.dto.app.AppQueryRequest;
-import com.lwx.lwxmagiccodebackend.model.dto.app.AppUpdateRequest;
+import com.lwx.lwxmagiccodebackend.model.dto.app.*;
 import com.lwx.lwxmagiccodebackend.model.entity.App;
 import com.lwx.lwxmagiccodebackend.model.entity.User;
 import com.lwx.lwxmagiccodebackend.model.enums.CodeGenTypeEnum;
@@ -317,6 +314,24 @@ public class AppController {
                 ));
     }
 
+    /**
+     * 应用部署
+     *
+     * @param appDeployRequest 部署请求
+     * @param request          请求
+     * @return 部署 URL
+     */
+    @PostMapping("/deploy")
+    public BaseResponse<String> deployApp(@RequestBody AppDeployRequest appDeployRequest, HttpServletRequest request) {
+        ThrowUtils.throwIf(appDeployRequest == null, ErrorCode.PARAMS_ERROR);
+        Long appId = appDeployRequest.getAppId();
+        ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.PARAMS_ERROR, "应用 ID 不能为空");
+        // 获取当前登录用户
+        User loginUser = userService.getLoginUser(request);
+        // 调用服务部署应用
+        String deployUrl = appService.deployApp(appId, loginUser);
+        return ResultUtils.success(deployUrl);
+    }
 
 
 
