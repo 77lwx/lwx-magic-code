@@ -34,8 +34,13 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+# 忽略测试目录和临时目录
+lwx-magic-code-backend/src/test/
+lwx-magic-code-backend/tmp/
+
 
 ### VS Code ###
 .vscode/
 /src/test/java/com/lwx/lwxmagiccodebackend/ai/AiCodeGeneratorServiceTest.java
 /src/test/java/com/lwx/lwxmagiccodebackend/core/CodeParserTest.java
+/src/test/java/com/lwx/lwxmagiccodebackend/core/AiCodeGeneratorFacadeTest.java
