@@ -152,7 +152,6 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
 
 
 
-    @Override
     public QueryWrapper getQueryWrapper(AppQueryRequest appQueryRequest) {
         if (appQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数为空");
@@ -167,16 +166,31 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
         Long userId = appQueryRequest.getUserId();
         String sortField = appQueryRequest.getSortField();
         String sortOrder = appQueryRequest.getSortOrder();
-        return QueryWrapper.create()
-                .eq("id", id)
-                .like("appName", appName)
-                .like("cover", cover)
-                .like("initPrompt", initPrompt)
-                .eq("codeGenType", codeGenType)
-                .eq("deployKey", deployKey)
-                .eq("priority", priority)
-                .eq("userId", userId)
-                .orderBy(sortField, "ascend".equals(sortOrder));
+
+        QueryWrapper queryWrapper = QueryWrapper.create();
+
+        queryWrapper = id != null ? queryWrapper.eq("id", id) : queryWrapper;
+        queryWrapper = hasText(appName) ? queryWrapper.like("appName", appName) : queryWrapper;
+        queryWrapper = hasText(cover) ? queryWrapper.like("cover", cover) : queryWrapper;
+        queryWrapper = hasText(initPrompt) ? queryWrapper.like("initPrompt", initPrompt) : queryWrapper;
+
+        // 关键：只有 codeGenType 非空才加条件
+        queryWrapper = hasText(codeGenType) ? queryWrapper.eq("codeGenType", codeGenType) : queryWrapper;
+
+        queryWrapper = hasText(deployKey) ? queryWrapper.eq("deployKey", deployKey) : queryWrapper;
+        queryWrapper = priority != null ? queryWrapper.eq("priority", priority) : queryWrapper;
+        queryWrapper = userId != null ? queryWrapper.eq("userId", userId) : queryWrapper;
+
+        if (hasText(sortField)) {
+            queryWrapper = queryWrapper.orderBy(sortField, "ascend".equals(sortOrder));
+        }
+
+        return queryWrapper;
+    }
+
+    // 辅助方法
+    private boolean hasText(String str) {
+        return str != null && !str.trim().isEmpty();
     }
 
 }
