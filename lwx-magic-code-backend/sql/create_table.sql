@@ -1,6 +1,5 @@
 # 数据库初始化
-# @author <a href="https://github.com/lilwx">程序员lwx</a>
-# @from <a href="https://codefather.cn">编程导航学习圈</a>
+# @author <a href="https://github.com/77lwx">程序员lwx</a>
 
 -- 创建库
 create database if not exists lwx_magic_code;

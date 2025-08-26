@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 应用 服务层。
  *
- * @author <a href="https://github.com/lilwx">浪味仙</a>
+ * @author <a href="https://github.com/77lwx">浪味仙</a>
  */
 public interface AppService extends IService<App> {
 

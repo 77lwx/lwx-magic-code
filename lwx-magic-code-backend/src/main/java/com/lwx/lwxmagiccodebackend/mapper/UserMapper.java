@@ -6,7 +6,7 @@ import com.lwx.lwxmagiccodebackend.model.entity.User;
 /**
  * 用户 映射层。
  *
- * @author <a href="https://github.com/lilwx">浪味仙</a>
+ * @author <a href="https://github.com/77lwx">浪味仙</a>
  */
 public interface UserMapper extends BaseMapper<User> {
 

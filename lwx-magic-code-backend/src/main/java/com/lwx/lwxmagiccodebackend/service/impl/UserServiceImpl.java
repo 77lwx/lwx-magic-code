@@ -28,7 +28,7 @@ import static com.lwx.lwxmagiccodebackend.constant.UserConstant.USER_LOGIN_STATE
 /**
  * 用户 服务层实现。
  *
- * @author <a href="https://github.com/lilwx">浪味仙</a>
+ * @author <a href="https://github.com/77lwx">浪味仙</a>
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
