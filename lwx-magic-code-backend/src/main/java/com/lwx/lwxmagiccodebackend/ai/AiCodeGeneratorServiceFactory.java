@@ -131,11 +131,4 @@ public class AiCodeGeneratorServiceFactory {
         return appId + "_" + codeGenType.getValue();
     }
 
-
-    @Bean
-    public AiAppNameGeneratorService appNameGeneratorService() {
-        return AiServices.builder(AiAppNameGeneratorService.class)
-                .chatModel(chatModel)
-                .build();
-    }
 }

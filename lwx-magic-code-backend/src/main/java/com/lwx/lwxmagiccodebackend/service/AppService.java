@@ -1,5 +1,6 @@
 package com.lwx.lwxmagiccodebackend.service;
 
+import com.lwx.lwxmagiccodebackend.model.dto.app.AppAddRequest;
 import com.lwx.lwxmagiccodebackend.model.dto.app.AppQueryRequest;
 import com.lwx.lwxmagiccodebackend.model.entity.User;
 import com.lwx.lwxmagiccodebackend.model.vo.AppVO;
@@ -27,6 +28,8 @@ public interface AppService extends IService<App> {
     Flux<String> chatToGenCode(Long appId, String userMessage, User loginUser);
 
     String deployApp(Long appId, User loginUser);
+
+    Long createApp(AppAddRequest appAddRequest, User loginUser);
 
     /**
      * 异步生成应用截图并更新封面

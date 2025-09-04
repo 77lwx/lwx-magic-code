@@ -5,6 +5,8 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.lwx.lwxmagiccodebackend.ai.AiAppNameGeneratorService;
+import com.lwx.lwxmagiccodebackend.ai.AiCodeGenTypeRoutingService;
 import com.lwx.lwxmagiccodebackend.constant.AppConstant;
 import com.lwx.lwxmagiccodebackend.core.AiCodeGeneratorFacade;
 import com.lwx.lwxmagiccodebackend.core.builder.VueProjectBuilder;
@@ -12,6 +14,7 @@ import com.lwx.lwxmagiccodebackend.core.handler.StreamHandlerExecutor;
 import com.lwx.lwxmagiccodebackend.exception.BusinessException;
 import com.lwx.lwxmagiccodebackend.exception.ErrorCode;
 import com.lwx.lwxmagiccodebackend.exception.ThrowUtils;
+import com.lwx.lwxmagiccodebackend.model.dto.app.AppAddRequest;
 import com.lwx.lwxmagiccodebackend.model.dto.app.AppQueryRequest;
 import com.lwx.lwxmagiccodebackend.model.entity.User;
 import com.lwx.lwxmagiccodebackend.model.enums.ChatHistoryMessageTypeEnum;
@@ -63,6 +66,12 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
 
     @Resource
     private ScreenshotService screenshotService;
+
+    @Resource
+    private AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService;
+
+    @Resource
+    private AiAppNameGeneratorService aiAppNameGeneratorService;
 
     @Override
     public Flux<String> chatToGenCode(Long appId, String userMessage ,User loginUser) {
@@ -153,6 +162,33 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
 
     }
 
+
+
+
+    @Override
+    public Long createApp(AppAddRequest appAddRequest, User loginUser) {
+        // 参数校验
+        String initPrompt = appAddRequest.getInitPrompt();
+        ThrowUtils.throwIf(StrUtil.isBlank(initPrompt), ErrorCode.PARAMS_ERROR, "初始化 prompt 不能为空");
+        // 构造入库对象
+        App app = new App();
+        BeanUtil.copyProperties(appAddRequest, app);
+        app.setUserId(loginUser.getId());
+        String appName = aiAppNameGeneratorService.generateAppName(initPrompt);
+        if ( appName == null ) {
+            // 应用名称暂时为 initPrompt 前 12 位
+            appName=initPrompt.substring(0, Math.min(initPrompt.length(), 12));
+        }
+        app.setAppName(appName);
+        // 使用 AI 智能选择代码生成类型
+        CodeGenTypeEnum selectedCodeGenType = aiCodeGenTypeRoutingService.routeCodeGenType(initPrompt);
+        app.setCodeGenType(selectedCodeGenType.getValue());
+        // 插入数据库
+        boolean result = this.save(app);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+        log.info("应用创建成功，ID: {}, 类型: {}", app.getId(), selectedCodeGenType.getValue());
+        return app.getId();
+    }
 
 
 
