@@ -3,6 +3,8 @@ package com.lwx.lwxmagiccodebackend.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.lwx.lwxmagiccodebackend.ai.AiAppNameGeneratorService;
+import com.lwx.lwxmagiccodebackend.ai.AiCodeGeneratorServiceFactory;
 import com.lwx.lwxmagiccodebackend.annotation.AuthCheck;
 import com.lwx.lwxmagiccodebackend.common.BaseResponse;
 import com.lwx.lwxmagiccodebackend.common.DeleteRequest;
@@ -21,6 +23,8 @@ import com.lwx.lwxmagiccodebackend.service.AppService;
 import com.lwx.lwxmagiccodebackend.service.UserService;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
+import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.request.ChatRequest;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
@@ -48,6 +52,9 @@ public class AppController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private AiCodeGeneratorServiceFactory aiCodeGeneratorServiceFactory;
+
     /**
      * 创建应用
      *
@@ -67,8 +74,14 @@ public class AppController {
         App app = new App();
         BeanUtil.copyProperties(appAddRequest, app);
         app.setUserId(loginUser.getId());
-        // 应用名称暂时为 initPrompt 前 12 位
-        app.setAppName(initPrompt.substring(0, Math.min(initPrompt.length(), 12)));
+
+        AiAppNameGeneratorService aiAppNameGeneratorService = aiCodeGeneratorServiceFactory.appNameGeneratorService();
+        String appName = aiAppNameGeneratorService.generateAppName(initPrompt);
+        if ( appName == null ) {
+            // 应用名称暂时为 initPrompt 前 12 位
+           appName=initPrompt.substring(0, Math.min(initPrompt.length(), 12));
+        }
+        app.setAppName(appName);
         // 暂时设置为多文件生成
         app.setCodeGenType(CodeGenTypeEnum.MULTI_FILE.getValue());
 //        app.setCodeGenType(CodeGenTypeEnum.VUE_PROJECT.getValue());
