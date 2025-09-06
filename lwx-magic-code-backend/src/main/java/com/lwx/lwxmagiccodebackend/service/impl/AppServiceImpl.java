@@ -7,6 +7,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.lwx.lwxmagiccodebackend.ai.AiAppNameGeneratorService;
 import com.lwx.lwxmagiccodebackend.ai.AiCodeGenTypeRoutingService;
+import com.lwx.lwxmagiccodebackend.ai.AiCodeGenTypeRoutingServiceFactory;
 import com.lwx.lwxmagiccodebackend.constant.AppConstant;
 import com.lwx.lwxmagiccodebackend.core.AiCodeGeneratorFacade;
 import com.lwx.lwxmagiccodebackend.core.builder.VueProjectBuilder;
@@ -68,7 +69,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
     private ScreenshotService screenshotService;
 
     @Resource
-    private AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService;
+    private AiCodeGenTypeRoutingServiceFactory aiCodeGenTypeRoutingServiceFactory;
 
     @Resource
     private AiAppNameGeneratorService aiAppNameGeneratorService;
@@ -180,7 +181,8 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
             appName=initPrompt.substring(0, Math.min(initPrompt.length(), 12));
         }
         app.setAppName(appName);
-        // 使用 AI 智能选择代码生成类型
+        // 使用 AI 智能选择代码生成类型（多例模式）
+        AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService = aiCodeGenTypeRoutingServiceFactory.createAiCodeGenTypeRoutingService();
         CodeGenTypeEnum selectedCodeGenType = aiCodeGenTypeRoutingService.routeCodeGenType(initPrompt);
         app.setCodeGenType(selectedCodeGenType.getValue());
         // 插入数据库
