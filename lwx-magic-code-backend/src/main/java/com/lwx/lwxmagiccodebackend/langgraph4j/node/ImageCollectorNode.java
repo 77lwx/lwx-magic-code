@@ -1,5 +1,6 @@
 package com.lwx.lwxmagiccodebackend.langgraph4j.node;
 
+import cn.hutool.core.date.StopWatch;
 import com.lwx.lwxmagiccodebackend.langgraph4j.ai.ImageCollectionPlanService;
 import com.lwx.lwxmagiccodebackend.langgraph4j.ai.ImageCollectionService;
 import com.lwx.lwxmagiccodebackend.langgraph4j.enums.ImageCategoryEnum;
@@ -34,6 +35,11 @@ public class ImageCollectorNode {
             String originalPrompt = context.getOriginalPrompt();
             List<ImageResource> collectedImages = new ArrayList<>();
 
+            // 开头计时
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+
+            // ... 业务逻辑
             try {
                 // 第一步：获取图片收集计划
                 ImageCollectionPlanService planService = SpringContextUtil.getBean(ImageCollectionPlanService.class);
@@ -87,6 +93,9 @@ public class ImageCollectorNode {
                     }
                 }
                 log.info("并发图片收集完成，共收集到 {} 张图片", collectedImages.size());
+                // 结尾停止计时并输出结果
+                stopWatch.stop();
+                log.info("图片收集总耗时: {} ms", stopWatch.getTotalTimeMillis());
             } catch (Exception e) {
                 log.error("图片收集失败: {}", e.getMessage(), e);
             }
