@@ -2,6 +2,7 @@ package com.lwx.lwxmagiccodebackend.langgraph4j.state;
 
 
 import com.lwx.lwxmagiccodebackend.langgraph4j.model.ImageResource;
+import com.lwx.lwxmagiccodebackend.langgraph4j.model.QualityResult;
 import com.lwx.lwxmagiccodebackend.model.enums.CodeGenTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,6 +43,12 @@ public class WorkflowContext implements Serializable {
      * 图片资源字符串
      */
     private String imageListStr;
+
+    /**
+     * 质量检查结果
+     */
+    private QualityResult qualityResult;
+
 
     /**
      * 图片资源列表
