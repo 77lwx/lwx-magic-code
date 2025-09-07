@@ -19,6 +19,8 @@ import com.lwx.lwxmagiccodebackend.model.entity.App;
 import com.lwx.lwxmagiccodebackend.model.entity.User;
 import com.lwx.lwxmagiccodebackend.model.enums.CodeGenTypeEnum;
 import com.lwx.lwxmagiccodebackend.model.vo.AppVO;
+import com.lwx.lwxmagiccodebackend.ratelimter.annotation.RateLimit;
+import com.lwx.lwxmagiccodebackend.ratelimter.enums.RateLimitType;
 import com.lwx.lwxmagiccodebackend.service.AppService;
 import com.lwx.lwxmagiccodebackend.service.ProjectDownloadService;
 import com.lwx.lwxmagiccodebackend.service.UserService;
@@ -301,6 +303,7 @@ public class AppController {
      * @return 生成结果流
      */
     @GetMapping(value = "/chat/gen/code", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @RateLimit(limitType = RateLimitType.USER, rate = 5, rateInterval = 60, message = "AI 对话请求过于频繁，请稍后再试")
     public Flux<ServerSentEvent<String>> chatToGenCode(@RequestParam Long appId,
                                                        @RequestParam String message,
                                                        HttpServletRequest request) {
