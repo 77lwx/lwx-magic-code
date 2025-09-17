@@ -5,8 +5,6 @@ import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.guardrail.OutputGuardrail;
 import dev.langchain4j.guardrail.OutputGuardrailResult;
 
-
-
 public class RetryOutputGuardrail implements OutputGuardrail {
 
     @Override
